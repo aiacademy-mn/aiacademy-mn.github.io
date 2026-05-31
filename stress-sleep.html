@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Стресс Менежмент ба Нойр — Сургалтын Гарын Авлага</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8A96E;
+    --gold-light: #E8D5A3;
+    --gold-dark: #9A7A45;
+    --dark: #0E0E0E;
+    --dark-2: #161616;
+    --dark-3: #1E1E1E;
+    --dark-4: #2A2A2A;
+    --dark-5: #333333;
+    --text-primary: #F5F0E8;
+    --text-secondary: #B8B0A0;
+    --text-muted: #6E6860;
+    --accent-teal: #4ECDC4;
+    --accent-red: #E74C3C;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--dark);
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* COVER */
+  .cover {
+    min-height: 100vh;
+    background: var(--dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 60px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(200,169,110,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cover-ornament {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 32px;
+    position: relative;
+  }
+
+  .cover-ornament::before, .cover-ornament::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .cover-ornament::before { left: -8px; }
+  .cover-ornament::after { right: -8px; }
+
+  .cover-badge {
+    font-family: 'Outfit', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .cover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .cover-title span {
+    color: var(--gold);
+  }
+
+  .cover-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 2.5vw, 28px);
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    margin-bottom: 48px;
+  }
+
+  .cover-desc {
+    max-width: 580px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+
+  .cover-bottom {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cover-stat {
+    text-align: center;
+  }
+
+  .cover-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--gold);
+    display: block;
+  }
+
+  .cover-stat-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .cover-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--dark-5);
+  }
+
+  /* MAIN LAYOUT */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* SECTION */
+  .section {
+    padding: 80px 0;
+    border-top: 1px solid var(--dark-4);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+
+  .section-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: var(--dark-5);
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: -8px;
+  }
+
+  .section-title-group {
+    flex: 1;
+    padding-top: 4px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  /* INTRO GRID */
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--dark-4);
+    border: 1px solid var(--dark-4);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .intro-card {
+    background: var(--dark-2);
+    padding: 32px;
+  }
+
+  .intro-card-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .intro-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  .intro-item::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  /* CAUSE CARDS */
+  .causes-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    background: var(--dark-4);
+    margin-bottom: 48px;
+  }
+
+  .cause-card {
+    background: var(--dark-2);
+    padding: 28px 20px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .cause-card:hover {
+    background: var(--dark-3);
+  }
+
+  .cause-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--dark-5);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .cause-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+    display: block;
+    color: var(--gold);
+  }
+
+  .cause-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .cause-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* DETAIL BLOCK */
+  .detail-block {
+    margin-bottom: 40px;
+    padding: 32px;
+    border-left: 2px solid var(--gold);
+    background: var(--dark-2);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .detail-block-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  .detail-block p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 11px;
+    color: var(--gold);
+    background: rgba(200,169,110,0.08);
+    border: 1px solid rgba(200,169,110,0.2);
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  /* TREATMENT PRINCIPLES */
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--dark-4);
+    margin-bottom: 40px;
+  }
+
+  .principle-card {
+    background: var(--dark-2);
+    padding: 32px 24px;
+  }
+
+  .principle-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: rgba(200,169,110,0.15);
+    display: block;
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+
+  .principle-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .principle-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* CONTRAINDICATIONS TABLE */
+  .contra-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+  }
+
+  .contra-table thead tr {
+    background: var(--dark-4);
+  }
+
+  .contra-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .contra-table tbody tr {
+    border-bottom: 1px solid var(--dark-4);
+    transition: background 0.15s;
+  }
+
+  .contra-table tbody tr:hover {
+    background: var(--dark-2);
+  }
+
+  .contra-table td {
+    padding: 16px 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    vertical-align: top;
+  }
+
+  .contra-table td:first-child {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--text-muted);
+    font-weight: 300;
+    width: 50px;
+    text-align: center;
+  }
+
+  .contra-table td:nth-child(2) {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 13px;
+  }
+
+  .alert-badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(231,76,60,0.1);
+    color: #E74C3C;
+    border: 1px solid rgba(231,76,60,0.2);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  /* TREATMENT STEPS */
+  .steps-container {
+    position: relative;
+    padding-left: 0;
+  }
+
+  .step-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 0;
+    margin-bottom: 2px;
+    background: var(--dark-2);
+    overflow: hidden;
+  }
+
+  .step-num-col {
+    background: var(--dark-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 0;
+    position: relative;
+  }
+
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  .step-content {
+    padding: 32px;
+  }
+
+  .step-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .step-products {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .product-tag {
+    font-size: 11px;
+    background: rgba(200,169,110,0.06);
+    border: 1px solid rgba(200,169,110,0.15);
+    color: var(--gold);
+    padding: 5px 12px;
+    border-radius: 2px;
+    font-weight: 400;
+  }
+
+  /* TREATMENT LEVELS COMPARISON */
+  .levels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--dark-4);
+    margin-bottom: 40px;
+  }
+
+  .level-card {
+    background: var(--dark-2);
+    padding: 36px;
+  }
+
+  .level-card.featured {
+    border-top: 2px solid var(--gold);
+  }
+
+  .level-badge {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .level-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+
+  .level-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  .level-item-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  /* TIMELINE / PROGRESS */
+  .timeline {
+    position: relative;
+    margin-bottom: 40px;
+  }
+
+  .timeline-track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--dark-4);
+  }
+
+  .timeline-item {
+    background: var(--dark-2);
+    padding: 36px 28px;
+    position: relative;
+  }
+
+  .timeline-session {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .timeline-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .timeline-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .timeline-items {
+    list-style: none;
+  }
+
+  .timeline-items li {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    padding-left: 12px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .timeline-items li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold-dark);
+  }
+
+  /* SERVICES TABLE */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--dark-4);
+    margin-bottom: 40px;
+  }
+
+  .service-card {
+    background: var(--dark-2);
+    padding: 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .service-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: rgba(200,169,110,0.2);
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: -4px;
+  }
+
+  .service-content {}
+
+  .service-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .service-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* PRODUCTS SECTION */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--dark-4);
+    margin-bottom: 40px;
+  }
+
+  .product-card {
+    background: var(--dark-2);
+    padding: 32px 24px;
+  }
+
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .product-amount {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .product-roles {
+    list-style: none;
+  }
+
+  .product-roles li {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--dark-4);
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .product-roles li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
+
+  /* WARNING BOX */
+  .warning-box {
+    background: rgba(231,76,60,0.06);
+    border: 1px solid rgba(231,76,60,0.2);
+    border-radius: 2px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .warning-icon {
+    font-size: 18px;
+    color: #E74C3C;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .warning-text {
+    font-size: 13px;
+    color: #E74C3C;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  /* INFO BOX */
+  .info-box {
+    background: rgba(200,169,110,0.06);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 2px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .info-icon {
+    font-size: 18px;
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .info-text {
+    font-size: 13px;
+    color: var(--gold-light);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* RESULTS OUTCOME */
+  .outcomes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--dark-4);
+    margin-bottom: 40px;
+  }
+
+  .outcome-card {
+    background: var(--dark-2);
+    padding: 32px;
+  }
+
+  .outcome-cat {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--dark-4);
+  }
+
+  .outcome-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  .outcome-check {
+    color: var(--accent-teal);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 0px;
+    font-weight: 600;
+  }
+
+  /* DAILY CARE SECTION */
+  .daily-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--dark-4);
+    margin-bottom: 40px;
+  }
+
+  .daily-card {
+    background: var(--dark-2);
+    padding: 36px;
+  }
+
+  .daily-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .daily-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  .daily-item {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.7;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--dark-4);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .daily-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--dark-2);
+    border-top: 1px solid var(--dark-4);
+    padding: 48px 0;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+
+  .footer-sub {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .footer-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--dark-5);
+    margin: 0 auto 24px;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* MECHANISM FLOW */
+  .flow-grid {
+    display: flex;
+    gap: 2px;
+    background: var(--dark-4);
+    margin-bottom: 40px;
+  }
+
+  .flow-item {
+    flex: 1;
+    background: var(--dark-2);
+    padding: 28px 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  .flow-step {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .flow-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+    color: var(--gold);
+  }
+
+  .flow-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    color: var(--dark-5);
+    font-size: 18px;
+    background: var(--dark-3);
+    padding: 0 4px;
+  }
+
+  /* PAGE BREAK INDICATOR */
+  .section-divider {
+    height: 1px;
+    background: var(--dark-4);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    .causes-grid { grid-template-columns: repeat(2, 1fr); }
+    .principles-grid { grid-template-columns: 1fr; }
+    .timeline-track { grid-template-columns: repeat(2, 1fr); }
+    .intro-grid { grid-template-columns: 1fr; }
+    .levels-grid { grid-template-columns: 1fr; }
+    .outcomes-grid { grid-template-columns: 1fr; }
+    .daily-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .products-grid { grid-template-columns: 1fr; }
+    .flow-grid { flex-direction: column; }
+  }
+
+  @media print {
+    body { background: #fff; color: #000; }
+    .cover { min-height: auto; padding: 40px; }
+  }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(14,14,14,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--dark-4);
+    padding: 0 48px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.2s;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .back-btn:hover { color: var(--gold); }
+
+  .back-btn-arrow {
+    font-size: 16px;
+    transition: transform 0.2s;
+  }
+
+  .back-btn:hover .back-btn-arrow { transform: translateX(-3px); }
+
+  .nav-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .nav-badge {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    background: rgba(200,169,110,0.07);
+    border: 1px solid rgba(200,169,110,0.15);
+    padding: 4px 12px;
+    border-radius: 2px;
+  }
+
+  /* ── QUIZ ── */
+  .quiz-section {
+    background: var(--dark-2);
+    border-top: 2px solid var(--gold);
+    padding: 80px 0;
+  }
+
+  .quiz-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .quiz-eyebrow {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .quiz-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .quiz-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 48px;
+    line-height: 1.7;
+  }
+
+  .quiz-progress-bar {
+    height: 2px;
+    background: var(--dark-4);
+    border-radius: 2px;
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+
+  .quiz-progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .quiz-counter {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .quiz-q {
+    display: none;
+  }
+
+  .quiz-q.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .quiz-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 28px;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .quiz-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    border: 1px solid var(--dark-5);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: var(--dark-3);
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.5;
+    text-align: left;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .quiz-opt:hover {
+    border-color: rgba(200,169,110,0.3);
+    background: var(--dark-4);
+    color: var(--text-primary);
+  }
+
+  .quiz-opt.selected {
+    border-color: var(--gold);
+    background: rgba(200,169,110,0.07);
+    color: var(--text-primary);
+  }
+
+  .quiz-opt.correct {
+    border-color: #4ECDC4;
+    background: rgba(78,205,196,0.07);
+    color: #4ECDC4;
+  }
+
+  .quiz-opt.wrong {
+    border-color: #E74C3C;
+    background: rgba(231,76,60,0.07);
+    color: #E74C3C;
+  }
+
+  .opt-letter {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--dark-5);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    letter-spacing: 0;
+    transition: all 0.18s;
+  }
+
+  .quiz-opt.selected .opt-letter {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(200,169,110,0.1);
+  }
+
+  .quiz-opt.correct .opt-letter {
+    border-color: #4ECDC4;
+    color: #4ECDC4;
+    background: rgba(78,205,196,0.1);
+  }
+
+  .quiz-opt.wrong .opt-letter {
+    border-color: #E74C3C;
+    color: #E74C3C;
+    background: rgba(231,76,60,0.1);
+  }
+
+  .quiz-explain {
+    display: none;
+    padding: 16px 20px;
+    border-left: 2px solid var(--gold);
+    background: rgba(200,169,110,0.05);
+    border-radius: 0 2px 2px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .quiz-explain.show { display: block; }
+
+  .quiz-explain strong {
+    color: var(--gold);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .quiz-nav {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .quiz-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--dark);
+    background: var(--gold);
+    border: none;
+    padding: 13px 32px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: none;
+  }
+
+  .quiz-btn:hover { background: var(--gold-light); }
+  .quiz-btn.visible { display: inline-block; }
+
+  /* RESULT */
+  .quiz-result {
+    display: none;
+    text-align: center;
+    padding: 48px 0 16px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .quiz-result.show { display: block; }
+
+  .result-score {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .result-total {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .result-msg {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .result-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+
+  .result-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .breakdown-item {
+    text-align: center;
+  }
+
+  .breakdown-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .breakdown-num.correct { color: #4ECDC4; }
+  .breakdown-num.wrong { color: #E74C3C; }
+
+  .breakdown-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .retry-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--gold);
+    background: transparent;
+    border: 1px solid rgba(200,169,110,0.3);
+    padding: 12px 32px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .retry-btn:hover {
+    background: rgba(200,169,110,0.07);
+    border-color: var(--gold);
+  }
+
+  /* FREE DIAGNOSIS CTA */
+  .free-diag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 38px;
+    padding: 17px 40px;
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    color: var(--dark);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(200,169,110,0.35);
+    transition: transform .25s ease, box-shadow .25s ease;
+    position: relative;
+    z-index: 2;
+  }
+  .free-diag-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 40px rgba(200,169,110,0.5);
+  }
+  .free-diag-icon { font-size: 13px; }
+  .free-diag-arrow { font-size: 18px; transition: transform .25s ease; }
+  .free-diag-btn:hover .free-diag-arrow { transform: translateX(5px); }
+  .free-diag-note {
+    margin-top: 16px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    letter-spacing: .3px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── DOSHA SELF-TEST ── */
+  .dosha-test { background: var(--dark-2); border: 1px solid var(--dark-4); border-radius: 4px; padding: 40px 36px; margin-top: 8px; }
+  .dosha-q { margin-bottom: 28px; }
+  .dosha-q-text { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--text-primary); margin-bottom: 16px; line-height: 1.4; }
+  .dosha-opts { display: flex; flex-direction: column; gap: 8px; }
+  .dosha-opt { display: flex; align-items: flex-start; gap: 12px; text-align: left; font-family: 'Outfit', sans-serif; font-size: 13px; color: var(--text-secondary); background: var(--dark-3); border: 1px solid var(--dark-4); padding: 13px 16px; border-radius: 3px; cursor: pointer; transition: all 0.18s; line-height: 1.5; }
+  .dosha-opt:hover { border-color: var(--gold-dark); color: var(--text-primary); }
+  .dosha-opt.picked { border-color: var(--gold); background: rgba(200,169,110,0.08); color: var(--text-primary); }
+  .dosha-opt-mark { width: 16px; height: 16px; border: 1px solid var(--dark-5); border-radius: 50%; flex-shrink: 0; margin-top: 2px; transition: all 0.18s; }
+  .dosha-opt.picked .dosha-opt-mark { border-color: var(--gold); background: var(--gold); box-shadow: inset 0 0 0 3px var(--dark-3); }
+  .dosha-submit { width: 100%; margin-top: 14px; padding: 16px; background: linear-gradient(135deg, var(--gold-light), var(--gold) 55%, var(--gold-dark)); color: var(--dark); font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 2px; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 8px 30px rgba(200,169,110,0.3); transition: transform .2s; }
+  .dosha-submit:hover { transform: translateY(-2px); }
+  .dosha-result { display: none; margin-top: 28px; padding: 32px; border: 1px solid var(--gold); border-radius: 4px; background: var(--dark-3); }
+  .dosha-result.show { display: block; animation: fadeIn 0.4s ease; }
+  .dosha-result-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .dosha-result-type { font-family: 'Cormorant Garamond', serif; font-size: 34px; color: var(--gold); margin-bottom: 14px; }
+  .dosha-result-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+  .dosha-bars { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .dosha-bar-row { display: flex; align-items: center; gap: 12px; }
+  .dosha-bar-name { font-size: 12px; color: var(--text-secondary); width: 64px; flex-shrink: 0; }
+  .dosha-bar-track { flex: 1; height: 8px; background: var(--dark-4); border-radius: 4px; overflow: hidden; }
+  .dosha-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold)); border-radius: 4px; width: 0; transition: width 0.6s ease; }
+  .dosha-bar-pct { font-size: 12px; color: var(--gold); width: 40px; text-align: right; flex-shrink: 0; }
+  .dosha-rx { background: var(--dark-2); border-left: 2px solid var(--gold); padding: 16px 20px; border-radius: 0 3px 3px 0; }
+  .dosha-rx-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .dosha-rx-text { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+</style>
+<body>
+
+<!-- ── TOP NAV ── -->
+<nav class="top-nav">
+  <a class="back-btn" href="index.html">
+    <span class="back-btn-arrow">←</span>
+    Буцах
+  </a>
+  <span class="nav-title">Стресс Менежмент ба Нойр</span>
+  <span class="nav-badge">Сургалт 08</span>
+</nav>
+
+<!-- ── COVER ── -->
+<div class="cover">
+  <div class="cover-badge">AI Academy · Мэргэжлийн Сургалт</div>
+  <div class="cover-ornament"></div>
+  <h1 class="cover-title">Стресс Менежмент<br><span>ба Нойр</span></h1>
+  <p class="cover-subtitle">Сургалтын Гарын Авлага</p>
+  <p class="cover-desc">
+    Стрессийн биед үзүүлэх нөлөө, уламжлалт анагаахын Хий, Шар, Бадган гурван махбодийн онол болон нойрыг сайжруулах мэргэжлийн арга зүй.
+  </p>
+  <div class="cover-bottom">
+    <div class="cover-stat">
+      <span class="cover-stat-num">3</span>
+      <span class="cover-stat-label">Махбодь</span>
+    </div>
+    <div class="cover-divider"></div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">8</span>
+      <span class="cover-stat-label">Тестийн асуулт</span>
+    </div>
+    <div class="cover-divider"></div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">10</span>
+      <span class="cover-stat-label">Шалгалтын асуулт</span>
+    </div>
+    <div class="cover-divider"></div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">∞</span>
+      <span class="cover-stat-label">Өдөр тутмын дадал</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">00</div>
+      <div class="section-title-group">
+        <div class="section-label">Танилцуулга</div>
+        <h2 class="section-title">Стресс гэж юу вэ?</h2>
+      </div>
+    </div>
+
+    <div class="intro-grid">
+      <div class="intro-card">
+        <div class="intro-card-title">Стресс гэдэг нь</div>
+        <div class="intro-item">Бие, сэтгэлийн дарамтад үзүүлэх хариу урвал</div>
+        <div class="intro-item">Аюул, ачаалал мэдрэхэд бие хамгаалалтад орох</div>
+        <div class="intro-item">Богино хугацаанд хэрэгтэй, урт хугацаанд хортой</div>
+        <div class="intro-item">Бие, сэтгэл, нойронд нэгэн зэрэг нөлөөлдөг</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-title">Хэрэв удаан үргэлжилбэл</div>
+        <div class="intro-item">Нойр муудах, тэнхээгүйдэх</div>
+        <div class="intro-item">Булчин хөших, толгой өвдөх</div>
+        <div class="intro-item">Хоол боловсруулалт алдагдах</div>
+        <div class="intro-item">Дархлаа суларч, өвчин дагуулах</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-icon">✦</div>
+      <div class="info-text">
+        Стресс нь өөрөө муу зүйл биш — энэ бол биеийн байгалийн хамгаалалтын механизм юм. Асуудал нь стресс <strong style="color: var(--gold);">удаан хугацаагаар намжихгүй</strong> үргэлжлэхэд гарч ирдэг. Тэгэхэд бие амрах боломжгүй болж, нойр алдагдаж, эрхтэн тогтолцоонууд хэт ачаалалд ордог.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION I: STRESS RESPONSE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">I</div>
+      <div class="section-title-group">
+        <div class="section-label">Нэгдүгээр хэсэг</div>
+        <h2 class="section-title">Стрессийн үед бие хэрхэн хариу үйлдэл үзүүлдэг вэ?</h2>
+      </div>
+    </div>
+
+    <!-- response flow -->
+    <div class="flow-grid">
+      <div class="flow-item">
+        <div class="flow-step">Шат 1</div>
+        <span class="flow-icon">⚠️</span>
+        <div class="flow-label">Аюул / ачаалал мэдрэх</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <div class="flow-step">Шат 2</div>
+        <span class="flow-icon">🧠</span>
+        <div class="flow-label">Тархи дохио өгөх</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <div class="flow-step">Шат 3</div>
+        <span class="flow-icon">💓</span>
+        <div class="flow-label">Даавар ялгарах (кортизол, адреналин)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <div class="flow-step">Шат 4</div>
+        <span class="flow-icon">⚡</span>
+        <div class="flow-label">Бие хурцдах</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <div class="flow-step">Шат 5</div>
+        <span class="flow-icon">🔁</span>
+        <div class="flow-label">Намжих эсвэл архагших</div>
+      </div>
+    </div>
+
+    <div class="causes-grid">
+      <div class="cause-card">
+        <span class="cause-num">01</span>
+        <span class="cause-icon">💓</span>
+        <div class="cause-title">Зүрхний цохилт олшрох</div>
+        <div class="cause-desc">Цусыг булчин руу хурдан түгээхээр зүрх хурдан цохилно</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-num">02</span>
+        <span class="cause-icon">🫁</span>
+        <div class="cause-title">Амьсгал түргэсэх</div>
+        <div class="cause-desc">Хүчилтөрөгчийн хэрэгцээ нэмэгдэж амьсгал хурдсана</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-num">03</span>
+        <span class="cause-icon">💪</span>
+        <div class="cause-title">Булчин хурцдах</div>
+        <div class="cause-desc">Мөр, хүзүү, нуруу чангарч хөшингө болно</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-num">04</span>
+        <span class="cause-icon">😴</span>
+        <div class="cause-title">Нойр алдагдах</div>
+        <div class="cause-desc">Тархи "сэрэмжтэй" байдалд орж нойр гүнзгийрэхгүй</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-num">05</span>
+        <span class="cause-icon">🍽️</span>
+        <div class="cause-title">Хоол боловсруулалт саарах</div>
+        <div class="cause-desc">Бие "аюулаас зугтахад" бэлдэж, хоол шингээлт хойшилно</div>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-block-title">Богино хугацааны стресс vs Архаг стресс</div>
+      <p><strong style="color: var(--gold);">Богино хугацааны стресс</strong> нь биеийг хурцалж, аюулаас хамгаалдаг эерэг механизм. Харин <strong style="color: var(--gold);">архаг (удаан) стресс</strong> нь бие тогтмол хурцдсан байдалд байснаар нойр, дархлаа, хоол боловсруулалт, сэтгэл санааг гэмтээж эхэлдэг.</p>
+      <div class="tag-list">
+        <span class="tag">Тэнхээ алдах</span>
+        <span class="tag">Нойргүйдэл</span>
+        <span class="tag">Толгой өвдөх</span>
+        <span class="tag">Сэтгэл түгших</span>
+        <span class="tag">Дархлаа суларх</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION II: THREE DOSHAS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">II</div>
+      <div class="section-title-group">
+        <div class="section-label">Хоёрдугаар хэсэг</div>
+        <h2 class="section-title">Хий, Шар, Бадган — гурван махбодь</h2>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-icon">✦</div>
+      <div class="info-text">
+        Уламжлалт анагаах ухаанд хүний бие <strong style="color: var(--gold);">Хий, Шар, Бадган</strong> гэсэн гурван махбодийн тэнцвэрээр зохицуулагддаг гэж үздэг. Стресс болон нойрны асуудал нь эдгээрийн аль нэг нь давамгайлж, тэнцвэр алдагдсантай холбоотой байдаг. Өөрийн махбодийн төрлийг мэдсэнээр тохирох арга, дэглэмийг сонгоход хялбар болно.
+      </div>
+    </div>
+
+    <!-- Three dosha cards -->
+    <div class="levels-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="level-card">
+        <div class="level-badge">Махбодь · 01</div>
+        <div class="level-name">Хий</div>
+        <div class="level-item"><div class="level-item-dot"></div>Хөдөлгөөн, мэдрэл, амьсгалыг зохицуулна</div>
+        <div class="level-item"><div class="level-item-dot"></div>Их бодол, түгшүүр, тайван бус</div>
+        <div class="level-item"><div class="level-item-dot"></div>Нойр нимгэн, амархан сэрдэг</div>
+        <div class="level-item"><div class="level-item-dot"></div>Бие хүйтэн, хуурайвтар</div>
+        <div class="level-item"><div class="level-item-dot"></div>Хурдан ядарч, хурдан сэргэдэг</div>
+      </div>
+      <div class="level-card">
+        <div class="level-badge">Махбодь · 02</div>
+        <div class="level-name">Шар</div>
+        <div class="level-item"><div class="level-item-dot"></div>Хоол боловсруулалт, дулаан, эрчийг зохицуулна</div>
+        <div class="level-item"><div class="level-item-dot"></div>Ууртай, тэвчээргүй, шулуун зан</div>
+        <div class="level-item"><div class="level-item-dot"></div>Бие халуун, цангах их</div>
+        <div class="level-item"><div class="level-item-dot"></div>Нойр гүн боловч халууцаж сэрдэг</div>
+        <div class="level-item"><div class="level-item-dot"></div>Зорилготой, шийдэмгий</div>
+      </div>
+      <div class="level-card">
+        <div class="level-badge">Махбодь · 03</div>
+        <div class="level-name">Бадган</div>
+        <div class="level-item"><div class="level-item-dot"></div>Бүтэц, чийг, тогтвортой байдлыг зохицуулна</div>
+        <div class="level-item"><div class="level-item-dot"></div>Тайван, тэвчээртэй, удаан</div>
+        <div class="level-item"><div class="level-item-dot"></div>Нойр их, гүн, удаан унтдаг</div>
+        <div class="level-item"><div class="level-item-dot"></div>Бие хүнд, залхуурах хандлагатай</div>
+        <div class="level-item"><div class="level-item-dot"></div>Тогтвортой, найдвартай зан</div>
+      </div>
+    </div>
+
+    <!-- Detail blocks per dosha -->
+    <div class="detail-block">
+      <div class="detail-block-title">Хий давамгайлсан үед стресс яаж илэрдэг вэ?</div>
+      <p>Хий ихсэхэд бодол хэт олшрон, тархи амрахаа больж, түгшүүр, нойргүйдэл, тайван бус байдал давамгайлдаг. Хүн жижиг зүйлд санаа зовж, шөнө дунд сэрэх, дахин унтаж чадахгүй байх нь элбэг.</p>
+      <div class="tag-list">
+        <span class="tag">Түгшүүр</span>
+        <span class="tag">Нойргүйдэл</span>
+        <span class="tag">Их бодол</span>
+        <span class="tag">Бие хүйтрэх</span>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-block-title">Шар давамгайлсан үед стресс яаж илэрдэг вэ?</div>
+      <p>Шар ихсэхэд уур хүрэх, тэвчээр алдах, бие халууцах, толгой хатгах зэрэг илэрдэг. Хүн ачааллыг "хүчээр даван туулах" гэж оролдох тусам бие улам халдаг.</p>
+      <div class="tag-list">
+        <span class="tag">Уур</span>
+        <span class="tag">Тэвчээргүйдэл</span>
+        <span class="tag">Халууцах</span>
+        <span class="tag">Толгой өвдөх</span>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-block-title">Бадган давамгайлсан үед стресс яаж илэрдэг вэ?</div>
+      <p>Бадган ихсэхэд тэнхээ алдах, хүнд суларсан мэдрэмж, хэт их унтах боловч сэргэхгүй байх, сэтгэл гутрах хандлага илэрдэг. Хүн идэвхгүйдэж, юунд ч дур сонирхолгүй болдог.</p>
+      <div class="tag-list">
+        <span class="tag">Тэнхээгүйдэл</span>
+        <span class="tag">Хүндрэх</span>
+        <span class="tag">Хэт унтах</span>
+        <span class="tag">Уйтгар</span>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top: 24px;">
+      <div class="info-icon">⚖️</div>
+      <div class="info-text">
+        Ихэнх хүн зөвхөн нэг махбодьтой биш — <strong style="color: var(--gold);">хоёр буюу гурван махбодь хавсарсан</strong> байдаг. Жишээ нь "Хий-Шар", "Бадган-Хий" гэх мэт. Доорх тестээр өөрийн давамгай махбодиа тодорхойлж болно.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION III: SELF TEST -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">III</div>
+      <div class="section-title-group">
+        <div class="section-label">Гуравдугаар хэсэг</div>
+        <h2 class="section-title">Өөрийн махбодийн төрлийг тодорхойлох тест</h2>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-icon">✦</div>
+      <div class="info-text">
+        Доорх 8 асуултад өөрт хамгийн ойр хариултыг сонгоорой. Бүх асуултад хариулсны дараа таны давамгай махбодь (Хий / Шар / Бадган / эсвэл хавсарсан) болон тохирох зөвлөмж гарч ирнэ.
+      </div>
+    </div>
+
+    <div class="dosha-test" id="doshaTest"></div>
+    <button class="dosha-submit" id="doshaSubmit">ҮР ДҮН ХАРАХ ✦</button>
+
+    <div class="dosha-result" id="doshaResult">
+      <div class="dosha-result-label">Таны давамгай махбодь</div>
+      <div class="dosha-result-type" id="doshaType">—</div>
+      <div class="dosha-bars" id="doshaBars"></div>
+      <div class="dosha-result-desc" id="doshaDesc"></div>
+      <div class="dosha-rx">
+        <div class="dosha-rx-title">Тохирох зөвлөмж</div>
+        <div class="dosha-rx-text" id="doshaRx"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION IV: TREATMENT METHODS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">IV</div>
+      <div class="section-title-group">
+        <div class="section-label">Дөрөвдүгээр хэсэг</div>
+        <h2 class="section-title">Махбодь тус бүрийн эмчилгээ, тэнцвэржүүлэх арга</h2>
+      </div>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-num">Хий</div>
+        <div class="service-content">
+          <div class="service-name">Тогтвортой дэглэм</div>
+          <div class="service-desc">Тогтсон цагт унтаж босох, хооллох. Дэглэм нь тайван бус Хийг тогтворжуулна.</div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">Хий</div>
+        <div class="service-content">
+          <div class="service-name">Дулаан, тосон арчилгаа</div>
+          <div class="service-desc">Дулаан тос, бүлээн ванн, толгой/хөлийн дулаан массаж бие дулаацуулж тайвшруулна.</div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">Хий</div>
+        <div class="service-content">
+          <div class="service-name">Амьсгалын дасгал</div>
+          <div class="service-desc">Удаан гүн амьсгал, бясалгал нь хэт олон бодлыг намжаана.</div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">Шар</div>
+        <div class="service-content">
+          <div class="service-name">Сэрүүцүүлэх</div>
+          <div class="service-desc">Хэт халуун орчин, хурц хоолноос зайлсхийж, сэрүүн, тайван орчинд амрах.</div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">Шар</div>
+        <div class="service-content">
+          <div class="service-name">Тэвчээр, амралт</div>
+          <div class="service-desc">Ачааллыг "хүчээр" даахаа болиод завсарлага авч, биеэ сэрүүцүүлэх.</div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">Шар</div>
+        <div class="service-content">
+          <div class="service-name">Зөөлөн хөдөлгөөн</div>
+          <div class="service-desc">Алхалт, усанд сэлэлт зэрэг хэт халаахгүй хөдөлгөөн уурыг тайлна.</div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">Бадган</div>
+        <div class="service-content">
+          <div class="service-name">Идэвхжүүлэх</div>
+          <div class="service-desc">Тогтмол хөдөлгөөн, дасгал нь хүндрэл, залхууралыг арилгана.</div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">Бадган</div>
+        <div class="service-content">
+          <div class="service-name">Хөнгөн дэглэм</div>
+          <div class="service-desc">Хэт их унтахаас зайлсхийж, өглөө эрт босох. Хөнгөн хооллолт.</div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">Бадган</div>
+        <div class="service-content">
+          <div class="service-name">Дулаан, эрчимтэй массаж</div>
+          <div class="service-desc">Эрчимтэй массаж, дулаан нь хуримтлагдсан чийг, хүндрэлийг хөдөлгөнө.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION V: SLEEP HABITS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">V</div>
+      <div class="section-title-group">
+        <div class="section-label">Тавдугаар хэсэг</div>
+        <h2 class="section-title">Нойрыг сайжруулах өдөр тутмын дадал</h2>
+      </div>
+    </div>
+
+    <div class="daily-grid">
+      <div class="daily-card">
+        <span class="daily-icon">🌙</span>
+        <div class="daily-title">Унтахын өмнө</div>
+        <div class="daily-item">Тогтсон цагт унтаж дассан байх</div>
+        <div class="daily-item">Унтахаас 1 цагийн өмнө дэлгэцээс хол байх</div>
+        <div class="daily-item">Бүлээн ус, бүлээн хөлийн ванн авах</div>
+        <div class="daily-item">Өрөөг харанхуй, сэрүүвтэр байлгах</div>
+      </div>
+      <div class="daily-card">
+        <span class="daily-icon">☀️</span>
+        <div class="daily-title">Өдрийн турш</div>
+        <div class="daily-item">Өглөө гэрэлд гарч, байгалийн гэрэл авах</div>
+        <div class="daily-item">Үдээс хойш кофе, эрчим хүчний ундаа хязгаарлах</div>
+        <div class="daily-item">Өдрийн цагаар хөдөлгөөн хийх</div>
+        <div class="daily-item">Оройн хоолыг хөнгөн, эрт идэх</div>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-icon">⚠</div>
+      <div class="warning-text">
+        Хэрэв нойргүйдэл 3 долоо хоногоос удаан үргэлжилж, өдрийн амьдралд ноцтой нөлөөлж байвал мэргэжлийн эмчид хандана уу. Энэхүү материал нь боловсролын зорилготой бөгөөд эмчийн зөвлөгөөг орлохгүй.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── QUIZ SECTION (placeholder, filled below) ── -->
+<!-- ═══ QUIZ ═══ -->
+<div class="quiz-section">
+  <div class="quiz-inner">
+    <div class="quiz-eyebrow">✦ Мэдлэгээ шалгах</div>
+    <h2 class="quiz-title">Шалгалт</h2>
+    <p class="quiz-desc">Сургалтын материалыг хэр сайн ойлгосноо шалгаарай. 10 асуулт, бүх асуултад хариулсны дараа үр дүн гарна.</p>
+
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" id="quizProgress" style="width:10%"></div>
+    </div>
+    <div class="quiz-counter" id="quizCounter">Асуулт 1 / 10</div>
+
+    <div class="quiz-q active" id="q1">
+      <div class="quiz-question">Стресс гэж юу вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,1,false)"><span class="opt-letter">А</span>Зөвхөн муу, хортой зүйл</button>
+        <button class="quiz-opt" onclick="selectOpt(this,1,true)"><span class="opt-letter">Б</span>Бие, сэтгэлийн дарамтад үзүүлэх байгалийн хариу урвал</button>
+        <button class="quiz-opt" onclick="selectOpt(this,1,false)"><span class="opt-letter">В</span>Зөвхөн нойргүйдэл</button>
+        <button class="quiz-opt" onclick="selectOpt(this,1,false)"><span class="opt-letter">Г</span>Зөвхөн өвчин</button>
+      </div>
+      <div class="quiz-explain" id="exp1"><strong>Зөв хариулт · Б</strong>Стресс бол бие, сэтгэлийн дарамт, ачаалалд үзүүлэх байгалийн хамгаалалтын хариу урвал юм. Богино хугацаанд хэрэгтэй, удаан үргэлжилбэл хортой.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next1" onclick="nextQ(1)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q2">
+      <div class="quiz-question">Стрессийн үед ялгардаг үндсэн дааврууд аль нь вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,2,false)"><span class="opt-letter">А</span>Инсулин ба мелатонин</button>
+        <button class="quiz-opt" onclick="selectOpt(this,2,true)"><span class="opt-letter">Б</span>Кортизол ба адреналин</button>
+        <button class="quiz-opt" onclick="selectOpt(this,2,false)"><span class="opt-letter">В</span>Эстроген ба тестостерон</button>
+        <button class="quiz-opt" onclick="selectOpt(this,2,false)"><span class="opt-letter">Г</span>Витамин D</button>
+      </div>
+      <div class="quiz-explain" id="exp2"><strong>Зөв хариулт · Б</strong>Стрессийн үед бие кортизол, адреналин зэрэг даавар ялгаруулж, зүрх хурдан цохилох, бие хурцдах хариу урвал үүсгэдэг.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next2" onclick="nextQ(2)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q3">
+      <div class="quiz-question">Архаг (удаан) стресс яагаад хортой вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,3,false)"><span class="opt-letter">А</span>Огт хортой биш</button>
+        <button class="quiz-opt" onclick="selectOpt(this,3,true)"><span class="opt-letter">Б</span>Бие тогтмол хурцдсан байснаар нойр, дархлаа, хоол боловсруулалтыг гэмтээдэг</button>
+        <button class="quiz-opt" onclick="selectOpt(this,3,false)"><span class="opt-letter">В</span>Зөвхөн арьсанд нөлөөлдөг</button>
+        <button class="quiz-opt" onclick="selectOpt(this,3,false)"><span class="opt-letter">Г</span>Биеийг хүчтэй болгодог</button>
+      </div>
+      <div class="quiz-explain" id="exp3"><strong>Зөв хариулт · Б</strong>Архаг стресс нь бие тасралтгүй хурцдсан байдалд байснаар амрах боломжгүй болж, нойр, дархлаа, хоол боловсруулалт, сэтгэл санааг гэмтээдэг.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next3" onclick="nextQ(3)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q4">
+      <div class="quiz-question">Уламжлалт анагаахын гурван махбодь аль нь вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,4,false)"><span class="opt-letter">А</span>Ус, гал, агаар</button>
+        <button class="quiz-opt" onclick="selectOpt(this,4,true)"><span class="opt-letter">Б</span>Хий, Шар, Бадган</button>
+        <button class="quiz-opt" onclick="selectOpt(this,4,false)"><span class="opt-letter">В</span>Зүрх, элэг, бөөр</button>
+        <button class="quiz-opt" onclick="selectOpt(this,4,false)"><span class="opt-letter">Г</span>Хий, цус, ус</button>
+      </div>
+      <div class="quiz-explain" id="exp4"><strong>Зөв хариулт · Б</strong>Уламжлалт анагаах ухаанд хүний биеийг Хий, Шар, Бадган гэсэн гурван махбодийн тэнцвэрээр зохицуулагддаг гэж үздэг.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next4" onclick="nextQ(4)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q5">
+      <div class="quiz-question">Хий махбодь юуг голчлон зохицуулдаг вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,5,true)"><span class="opt-letter">А</span>Хөдөлгөөн, мэдрэл, амьсгал</button>
+        <button class="quiz-opt" onclick="selectOpt(this,5,false)"><span class="opt-letter">Б</span>Хоол боловсруулалт, дулаан</button>
+        <button class="quiz-opt" onclick="selectOpt(this,5,false)"><span class="opt-letter">В</span>Бүтэц, чийг</button>
+        <button class="quiz-opt" onclick="selectOpt(this,5,false)"><span class="opt-letter">Г</span>Зөвхөн нойр</button>
+      </div>
+      <div class="quiz-explain" id="exp5"><strong>Зөв хариулт · А</strong>Хий нь хөдөлгөөн, мэдрэл, амьсгалыг зохицуулдаг. Ихсэхэд түгшүүр, нойргүйдэл, тайван бус байдал давамгайлна.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next5" onclick="nextQ(5)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q6">
+      <div class="quiz-question">Шар давамгайлсан үед стресс хэрхэн илэрдэг вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,6,false)"><span class="opt-letter">А</span>Хэт их унтах, тэнхээгүйдэх</button>
+        <button class="quiz-opt" onclick="selectOpt(this,6,true)"><span class="opt-letter">Б</span>Уур хүрэх, тэвчээр алдах, бие халууцах</button>
+        <button class="quiz-opt" onclick="selectOpt(this,6,false)"><span class="opt-letter">В</span>Бие хүйтрэх, тайван байх</button>
+        <button class="quiz-opt" onclick="selectOpt(this,6,false)"><span class="opt-letter">Г</span>Ямар ч өөрчлөлтгүй</button>
+      </div>
+      <div class="quiz-explain" id="exp6"><strong>Зөв хариулт · Б</strong>Шар ихсэхэд уур хүрэх, тэвчээр алдах, бие халууцах, толгой хатгах зэрэг илэрдэг.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next6" onclick="nextQ(6)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q7">
+      <div class="quiz-question">Бадган давамгайлсан хүний нойр ямар байдаг вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,7,false)"><span class="opt-letter">А</span>Нимгэн, амархан сэрдэг</button>
+        <button class="quiz-opt" onclick="selectOpt(this,7,true)"><span class="opt-letter">Б</span>Их, гүн, удаан унтдаг</button>
+        <button class="quiz-opt" onclick="selectOpt(this,7,false)"><span class="opt-letter">В</span>Огт унтдаггүй</button>
+        <button class="quiz-opt" onclick="selectOpt(this,7,false)"><span class="opt-letter">Г</span>Зөвхөн өдөр унтдаг</button>
+      </div>
+      <div class="quiz-explain" id="exp7"><strong>Зөв хариулт · Б</strong>Бадган давамгайлсан хүн их, гүн, удаан унтдаг боловч сэргэхгүй, бие хүндэрсэн мэдрэмжтэй байж болно.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next7" onclick="nextQ(7)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q8">
+      <div class="quiz-question">Хий давамгайлсан хүнд аль арга тохиромжтой вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,8,false)"><span class="opt-letter">А</span>Сэрүүцүүлэх, хүйтэн ванн</button>
+        <button class="quiz-opt" onclick="selectOpt(this,8,true)"><span class="opt-letter">Б</span>Тогтвортой дэглэм, дулаан тосон арчилгаа, амьсгалын дасгал</button>
+        <button class="quiz-opt" onclick="selectOpt(this,8,false)"><span class="opt-letter">В</span>Хэт их хөдөлгөөн</button>
+        <button class="quiz-opt" onclick="selectOpt(this,8,false)"><span class="opt-letter">Г</span>Шөнө орой хооллох</button>
+      </div>
+      <div class="quiz-explain" id="exp8"><strong>Зөв хариулт · Б</strong>Хий тайван бус байдаг тул тогтвортой дэглэм, дулаан тосон арчилгаа, амьсгалын дасгал нь түүнийг тогтворжуулж тайвшруулна.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next8" onclick="nextQ(8)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q9">
+      <div class="quiz-question">Нойрыг сайжруулах зөв дадал аль нь вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,9,false)"><span class="opt-letter">А</span>Унтахын өмнө утсаа удаан үзэх</button>
+        <button class="quiz-opt" onclick="selectOpt(this,9,false)"><span class="opt-letter">Б</span>Орой оройтож хүчтэй кофе уух</button>
+        <button class="quiz-opt" onclick="selectOpt(this,9,true)"><span class="opt-letter">В</span>Тогтсон цагт унтах, өрөөг харанхуй, сэрүүвтэр байлгах</button>
+        <button class="quiz-opt" onclick="selectOpt(this,9,false)"><span class="opt-letter">Г</span>Оройн хоолыг их, оройтуулж идэх</button>
+      </div>
+      <div class="quiz-explain" id="exp9"><strong>Зөв хариулт · В</strong>Тогтсон цагт унтах, дэлгэцээс хол байх, өрөөг харанхуй сэрүүвтэр байлгах нь нойрыг гүнзгийрүүлдэг.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next9" onclick="nextQ(9)">Дараах →</button></div>
+    </div>
+
+    <div class="quiz-q" id="q10">
+      <div class="quiz-question">Ихэнх хүний махбодийн төрөл ямар байдаг вэ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,10,false)"><span class="opt-letter">А</span>Заавал зөвхөн нэг махбодьтой</button>
+        <button class="quiz-opt" onclick="selectOpt(this,10,true)"><span class="opt-letter">Б</span>Хоёр буюу гурван махбодь хавсарсан байж болно</button>
+        <button class="quiz-opt" onclick="selectOpt(this,10,false)"><span class="opt-letter">В</span>Махбодьгүй</button>
+        <button class="quiz-opt" onclick="selectOpt(this,10,false)"><span class="opt-letter">Г</span>Махбодь өдөр бүр бүрэн солигддог</button>
+      </div>
+      <div class="quiz-explain" id="exp10"><strong>Зөв хариулт · Б</strong>Ихэнх хүн зөвхөн нэг махбодьтой биш, "Хий-Шар", "Бадган-Хий" гэх мэт хоёр буюу гурван махбодь хавсарсан байдаг.</div>
+      <div class="quiz-nav"><button class="quiz-btn" id="next10" onclick="showResult()">Үр дүн харах ✦</button></div>
+    </div>
+
+    <div class="quiz-result" id="quizResult">
+      <div class="result-score" id="resultScore">0</div>
+      <div class="result-total">10-аас оноо</div>
+      <div class="result-msg" id="resultMsg"></div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="result-breakdown">
+        <div class="breakdown-item">
+          <span class="breakdown-num correct" id="correctCount">0</span>
+          <span class="breakdown-label">Зөв</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="breakdown-num wrong" id="wrongCount">0</span>
+          <span class="breakdown-label">Буруу</span>
+        </div>
+      </div>
+      <button class="retry-btn" onclick="retryQuiz()">↺ Дахин оролдох</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">AI ACADEMY</div>
+  <div class="footer-note">Мэргэжлийн Сургалтын Материал</div>
+  <div class="footer-divider"></div>
+  <div class="footer-sub">Энэхүү сургалтын гарын авлага нь мэргэжлийн хэрэглээнд зориулагдсан бөгөөд зөвхөн боловсролын зорилгоор ашиглагдана.</div>
+</footer>
+<script>
+  /* ═══ DOSHA SELF-TEST ═══ */
+  const DOSHA_Q = [
+    { q: "Дарамт ачаалал ирэхэд та ихэвчлэн...", o: [
+      {t:"Санаа зовж, бодол олширч, тайван бус болдог", d:"hii"},
+      {t:"Уур хүрч, тэвчээр алддаг", d:"shar"},
+      {t:"Тайван, удаан хариу үзүүлдэг, бие хүндэрдэг", d:"badgan"} ]},
+    { q: "Таны нойр ямар байдаг вэ?", o: [
+      {t:"Нимгэн, амархан сэрдэг, дахин унтахад хэцүү", d:"hii"},
+      {t:"Гүн боловч халууцаж эсвэл дунд нь сэрдэг", d:"shar"},
+      {t:"Их, гүн, удаан унтдаг, сэрэхэд хэцүү", d:"badgan"} ]},
+    { q: "Таны бие ихэвчлэн...", o: [
+      {t:"Хүйтэн, хуурайвтар", d:"hii"},
+      {t:"Халуун, цангах их", d:"shar"},
+      {t:"Сэрүүн, чийглэг, хүндэвтэр", d:"badgan"} ]},
+    { q: "Стресстэй үед таны зан ааш...", o: [
+      {t:"Тогтворгүй, түгшүүртэй болдог", d:"hii"},
+      {t:"Шулуун, ширүүн, шүүмжлэлтэй болдог", d:"badgan_false_shar"} ]},
+    { q: "Та ажлаа хийхдээ...", o: [
+      {t:"Хурдан эхэлдэг ч анхаарал сарнидаг", d:"hii"},
+      {t:"Зорилготой, шийдэмгий, эрчтэй", d:"shar"},
+      {t:"Удаан ч тогтвортой, найдвартай", d:"badgan"} ]},
+    { q: "Таны хоолны дуршил...", o: [
+      {t:"Тогтворгүй, заримдаа мартдаг", d:"hii"},
+      {t:"Их, өлсөхөд тэвчдэггүй", d:"shar"},
+      {t:"Тогтвортой, удаан шингэдэг", d:"badgan"} ]},
+    { q: "Стресс ихсэхэд танд юу тохиолддог вэ?", o: [
+      {t:"Нойргүйдэх, толгой эргэх, бие хүйтрэх", d:"hii"},
+      {t:"Толгой өвдөх, халууцах, ходоод эмзэглэх", d:"shar"},
+      {t:"Тэнхээ алдах, уйдах, хэт унтах", d:"badgan"} ]},
+    { q: "Та тайвшрахын тулд юу хийх дуртай вэ?", o: [
+      {t:"Дулаан орчин, тайван амралт", d:"hii"},
+      {t:"Сэрүүн орчин, зугаалга", d:"shar"},
+      {t:"Хөдөлгөөн, идэвхтэй үйл ажиллагаа", d:"badgan"} ]}
+  ];
+
+  const doshaState = {};
+  const testBox = document.getElementById('doshaTest');
+  DOSHA_Q.forEach((item, qi) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'dosha-q';
+    const qt = document.createElement('div');
+    qt.className = 'dosha-q-text';
+    qt.textContent = (qi+1) + '. ' + item.q;
+    wrap.appendChild(qt);
+    const opts = document.createElement('div');
+    opts.className = 'dosha-opts';
+    item.o.forEach((opt) => {
+      const b = document.createElement('button');
+      b.className = 'dosha-opt';
+      b.type = 'button';
+      const mark = document.createElement('span');
+      mark.className = 'dosha-opt-mark';
+      const txt = document.createElement('span');
+      txt.textContent = opt.t;
+      b.appendChild(mark); b.appendChild(txt);
+      b.onclick = function() {
+        opts.querySelectorAll('.dosha-opt').forEach(o => o.classList.remove('picked'));
+        b.classList.add('picked');
+        // map false_shar to shar
+        doshaState[qi] = (opt.d === 'badgan_false_shar') ? 'shar' : opt.d;
+      };
+      opts.appendChild(b);
+    });
+    wrap.appendChild(opts);
+    testBox.appendChild(wrap);
+  });
+
+  const DOSHA_INFO = {
+    hii: { name: "Хий", desc: "Таны бие тайван бус Хий махбодь давамгайлж байна. Стресс ихсэхэд түгшүүр, нойргүйдэл, их бодол, бие хүйтрэх зэрэг илэрдэг.",
+      rx: "Тогтсон цагт унтаж босох, дулаан тос болон бүлээн ваннаар бие дулаацуулах, удаан гүн амьсгалын дасгал хийх. Дэглэм, дулаан, тайван орчин таныг тогтворжуулна." },
+    shar: { name: "Шар", desc: "Таны бие халуун, эрчимтэй Шар махбодь давамгайлж байна. Стресс ихсэхэд уур, тэвчээргүйдэл, халууцах, толгой өвдөх илэрдэг.",
+      rx: "Хэт халуун орчин, хурц хоолноос зайлсхийж, сэрүүн тайван орчинд амрах. Ачааллыг 'хүчээр' даахаа болиод завсарлага авч, алхалт зэрэг зөөлөн хөдөлгөөн хийх." },
+    badgan: { name: "Бадган", desc: "Таны бие тогтвортой, удаан Бадган махбодь давамгайлж байна. Стресс ихсэхэд тэнхээ алдах, хүндрэх, хэт унтах, уйтгар илэрдэг.",
+      rx: "Тогтмол хөдөлгөөн, дасгалаар биеэ идэвхжүүлэх, хэт их унтахаас зайлсхийж өглөө эрт босох. Хөнгөн хооллолт, дулаан эрчимтэй массаж тус болно." }
+  };
+
+  document.getElementById('doshaSubmit').onclick = function() {
+    if (Object.keys(doshaState).length < DOSHA_Q.length) {
+      alert('Бүх ' + DOSHA_Q.length + ' асуултад хариулна уу.');
+      return;
+    }
+    const tally = { hii:0, shar:0, badgan:0 };
+    Object.values(doshaState).forEach(d => tally[d]++);
+    const total = DOSHA_Q.length;
+    const sorted = Object.entries(tally).sort((a,b) => b[1]-a[1]);
+    const top = sorted[0], second = sorted[1];
+
+    let typeLabel, info;
+    // combined if top two are close (within 1)
+    if (top[1] - second[1] <= 1 && second[1] > 0) {
+      typeLabel = DOSHA_INFO[top[0]].name + "–" + DOSHA_INFO[second[0]].name + " (хавсарсан)";
+      info = {
+        desc: "Таны бие " + DOSHA_INFO[top[0]].name + " болон " + DOSHA_INFO[second[0]].name + " махбодь хавсарсан төрөлд багтаж байна. Хоёр махбодийн шинж танд хосолж илэрдэг.",
+        rx: DOSHA_INFO[top[0]].rx + " Мөн: " + DOSHA_INFO[second[0]].rx
+      };
+    } else {
+      typeLabel = DOSHA_INFO[top[0]].name;
+      info = DOSHA_INFO[top[0]];
+    }
+
+    document.getElementById('doshaType').textContent = typeLabel;
+    document.getElementById('doshaDesc').textContent = info.desc;
+    document.getElementById('doshaRx').textContent = info.rx;
+
+    const barsBox = document.getElementById('doshaBars');
+    barsBox.innerHTML = '';
+    [['hii','Хий'],['shar','Шар'],['badgan','Бадган']].forEach(([k,label]) => {
+      const pct = Math.round(tally[k]/total*100);
+      const row = document.createElement('div');
+      row.className = 'dosha-bar-row';
+      row.innerHTML = '<span class="dosha-bar-name">'+label+'</span>'+
+        '<span class="dosha-bar-track"><span class="dosha-bar-fill" style="width:0%"></span></span>'+
+        '<span class="dosha-bar-pct">'+pct+'%</span>';
+      barsBox.appendChild(row);
+      setTimeout(() => { row.querySelector('.dosha-bar-fill').style.width = pct+'%'; }, 50);
+    });
+
+    const res = document.getElementById('doshaResult');
+    res.classList.add('show');
+    res.scrollIntoView({behavior:'smooth', block:'center'});
+  };
+
+  /* ═══ QUIZ ═══ */
+  let score = 0;
+
+  function selectOpt(btn, qNum, isCorrect) {
+    const q = document.getElementById('q' + qNum);
+    if (q.dataset.answered) return;
+    q.dataset.answered = 'true';
+    const opts = q.querySelectorAll('.quiz-opt');
+    const nextBtn = document.getElementById('next' + qNum);
+    opts.forEach(o => {
+      o.style.pointerEvents = 'none';
+      if (o === btn) {
+        o.classList.add(isCorrect ? 'correct' : 'wrong');
+      } else if (o.onclick.toString().includes('true')) {
+        o.classList.add('correct');
+      }
+    });
+    document.getElementById('exp' + qNum).classList.add('show');
+    if (isCorrect) score++;
+    if (nextBtn) nextBtn.classList.add('visible');
+  }
+
+  function nextQ(current) {
+    if (!document.getElementById('q' + current).dataset.answered) return;
+    document.getElementById('q' + current).classList.remove('active');
+    const next = current + 1;
+    document.getElementById('q' + next).classList.add('active');
+    document.getElementById('quizCounter').textContent = 'Асуулт ' + next + ' / 10';
+    document.getElementById('quizProgress').style.width = ((next / 10) * 100) + '%';
+  }
+
+  function showResult() {
+    if (!document.getElementById('q10').dataset.answered) return;
+    document.getElementById('q10').classList.remove('active');
+    document.getElementById('quizProgress').style.width = '100%';
+    document.getElementById('quizResult').classList.add('show');
+    document.getElementById('resultScore').textContent = score;
+    document.getElementById('correctCount').textContent = score;
+    document.getElementById('wrongCount').textContent = 10 - score;
+    let msg, sub;
+    if (score === 10) { msg = 'Гайхалтай! Бүрэн тэнцлээ.'; sub = 'Сургалтын материалыг маш сайн эзэмшсэн байна.'; }
+    else if (score >= 7) { msg = 'Маш сайн! Бараг тэнцлээ.'; sub = 'Сайн ойлгосон байна. Буруу хариултуудаа дахин нягтлаарай.'; }
+    else if (score >= 5) { msg = 'Дунд зэрэг. Дахин давтаарай.'; sub = 'Материалыг дахин нягт уншиж, дасгал хийх шаардлагатай.'; }
+    else { msg = 'Материалыг дахин нягтлаарай.'; sub = 'Сургалтын гарын авлагыг дахин уншиж, шалгалтыг дахин өгөөрэй.'; }
+    document.getElementById('resultMsg').textContent = msg;
+    document.getElementById('resultSub').textContent = sub;
+    document.getElementById('quizCounter').textContent = 'Шалгалт дууслаа';
+  }
+
+  function retryQuiz() {
+    score = 0;
+    for (let i = 1; i <= 10; i++) {
+      const q = document.getElementById('q' + i);
+      q.dataset.answered = '';
+      q.classList.remove('active');
+      q.querySelectorAll('.quiz-opt').forEach(o => { o.classList.remove('correct','wrong','selected'); o.style.pointerEvents = ''; });
+      const exp = document.getElementById('exp' + i); if (exp) exp.classList.remove('show');
+      const nb = document.getElementById('next' + i); if (nb) nb.classList.remove('visible');
+    }
+    document.getElementById('quizResult').classList.remove('show');
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('quizCounter').textContent = 'Асуулт 1 / 10';
+    document.getElementById('quizProgress').style.width = '10%';
+  }
+</script>
+</body>
+</html>
