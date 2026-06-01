@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Эс яагаад ядардаг вэ? · Арьсны эрч хүчний тест</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F2E9;
+    --bg-2:#FBF7F0;
+    --ink:#2C2521;
+    --ink-soft:#6B5F55;
+    --rose:#B96B52;
+    --rose-deep:#9E5740;
+    --sage:#7E8C6E;
+    --gold:#C9A96A;
+    --line:#E6DACB;
+    --card:#FFFDF9;
+    --shadow:0 24px 60px -28px rgba(60,40,28,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Manrope',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(60% 50% at 15% 10%, rgba(201,169,106,.16), transparent 70%),
+      radial-gradient(55% 45% at 90% 85%, rgba(185,107,82,.13), transparent 70%),
+      radial-gradient(40% 40% at 80% 5%, rgba(126,140,110,.10), transparent 70%);
+  }
+  .wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:28px 20px 80px}
+
+  /* Header / progress */
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .brand{font-family:'Cormorant Garamond',serif;font-size:21px;letter-spacing:.06em;font-weight:600;color:var(--rose-deep)}
+  .brand span{color:var(--sage)}
+  .stepcount{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .bar{height:4px;background:var(--line);border-radius:99px;overflow:hidden;margin:14px 0 34px}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--rose));border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+  /* Screens */
+  .screen{display:none;animation:rise .55s cubic-bezier(.2,.7,.3,1) both}
+  .screen.active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  .kicker{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--sage);font-weight:600;margin-bottom:14px}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,7vw,52px);line-height:1.04;letter-spacing:-.01em;margin-bottom:18px}
+  h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(27px,5.5vw,38px);line-height:1.1;margin-bottom:14px}
+  h3{font-family:'Manrope',sans-serif;font-weight:700;font-size:16px;letter-spacing:.01em;margin-bottom:6px}
+  p{color:var(--ink-soft);font-size:16.5px;font-weight:400;margin-bottom:16px}
+  p strong{color:var(--ink);font-weight:600}
+  .lead{font-size:19px;color:var(--ink);font-weight:400}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:var(--shadow);margin-bottom:18px}
+  .card.tight{padding:20px 22px}
+
+  /* feature list */
+  .flist{list-style:none;margin:8px 0 4px}
+  .flist li{display:flex;gap:14px;padding:13px 0;border-bottom:1px dashed var(--line)}
+  .flist li:last-child{border-bottom:none}
+  .dot{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;color:#fff;background:linear-gradient(135deg,var(--rose),var(--rose-deep))}
+  .flist .sage .dot{background:linear-gradient(135deg,var(--sage),#5f6c52)}
+  .flist b{color:var(--ink);font-weight:600}
+  .flist small{color:var(--ink-soft);display:block;font-size:14.5px}
+
+  /* Buttons */
+  .btnrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:'Manrope';font-weight:600;font-size:16px;
+    padding:15px 30px;border-radius:99px;transition:transform .2s,box-shadow .2s,background .2s;letter-spacing:.01em}
+  .btn:active{transform:scale(.97)}
+  .btn-primary{background:var(--ink);color:#F8F2E9;box-shadow:0 12px 26px -12px rgba(44,37,33,.7)}
+  .btn-primary:hover{background:var(--rose-deep);box-shadow:0 16px 30px -12px rgba(158,87,64,.6)}
+  .btn-ghost{background:transparent;color:var(--ink-soft);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--rose);color:var(--rose-deep)}
+  .btn-rose{background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;box-shadow:0 14px 30px -12px rgba(158,87,64,.65)}
+  .btn-rose:hover{filter:brightness(1.05)}
+
+  /* Yes/No big choice */
+  .choice{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+  .choice button{padding:24px;border-radius:20px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;
+    font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--ink);transition:.25s}
+  .choice button:hover{border-color:var(--rose);transform:translateY(-3px);box-shadow:var(--shadow)}
+  .choice button small{display:block;font-family:'Manrope';font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:4px;letter-spacing:.02em}
+
+  /* Quiz */
+  .q{margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+  .q:last-child{border-bottom:none}
+  .q .num{font-family:'Cormorant Garamond',serif;color:var(--rose);font-size:15px;font-weight:600;letter-spacing:.1em}
+  .q .qt{font-size:17px;font-weight:600;color:var(--ink);margin:4px 0 14px}
+  .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .opts label{position:relative;cursor:pointer}
+  .opts input{position:absolute;opacity:0;inset:0}
+  .opts span{display:block;text-align:center;padding:12px 6px;border-radius:13px;border:1.5px solid var(--line);
+    background:var(--bg-2);font-size:14px;font-weight:600;color:var(--ink-soft);transition:.2s}
+  .opts label:hover span{border-color:var(--gold)}
+  .opts input:checked + span{background:var(--ink);color:#F8F2E9;border-color:var(--ink)}
+
+  .note{font-size:13.5px;color:var(--ink-soft);background:var(--bg-2);border:1px dashed var(--line);border-radius:14px;padding:13px 16px;margin-top:6px}
+  .alert{background:#fbeee6;border:1px solid #f0d2bf;color:var(--rose-deep);border-radius:14px;padding:13px 16px;font-size:14.5px;font-weight:600;margin-top:14px;display:none}
+
+  /* Result gauge */
+  .gauge{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin:6px 0 8px}
+  .ring{--p:0;flex:none;width:128px;height:128px;border-radius:50%;display:grid;place-items:center;
+    background:conic-gradient(var(--rose) calc(var(--p)*1%), var(--line) 0)}
+  .ring::before{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:var(--card)}
+  .ring{position:relative}
+  .ring b{position:relative;font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:var(--ink);line-height:1}
+  .ring small{position:relative;display:block;text-align:center;font-size:11px;color:var(--ink-soft);letter-spacing:.1em;margin-top:2px}
+  .verdict{flex:1;min-width:200px}
+  .pill{display:inline-block;padding:6px 16px;border-radius:99px;font-size:13px;font-weight:700;letter-spacing:.05em;color:#fff;margin-bottom:8px}
+
+  .timeline{list-style:none;margin-top:8px}
+  .timeline li{position:relative;padding:0 0 20px 30px;border-left:2px solid var(--line)}
+  .timeline li:last-child{border-left-color:transparent;padding-bottom:0}
+  .timeline li::before{content:"";position:absolute;left:-8px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--rose);box-shadow:0 0 0 4px var(--bg)}
+  .timeline b{color:var(--ink);font-weight:700;display:block;font-size:15px}
+  .timeline small{color:var(--ink-soft);font-size:14px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.grid2,.choice{grid-template-columns:1fr}.opts{grid-template-columns:1fr 1fr 1fr}}
+
+  /* Service extras */
+  .badgewrap{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+  .badge{font-size:12.5px;font-weight:600;letter-spacing:.04em;padding:6px 14px;border-radius:99px;background:var(--bg-2);border:1px solid var(--line);color:var(--ink-soft)}
+  .badge.gold{background:linear-gradient(135deg,var(--gold),#b9924f);color:#fff;border-color:transparent}
+  .price{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:20px;text-align:center}
+  .price small{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .price b{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--ink);display:block;line-height:1}
+  .price span{display:block;font-size:13px;color:var(--ink-soft);margin-top:8px}
+  .price.hot{border-color:var(--rose);background:linear-gradient(180deg,#fbeee6,var(--card));position:relative}
+  .price.hot::after{content:"Хамгийн их сонгогддог";position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+    background:var(--rose);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:4px 12px;border-radius:99px;white-space:nowrap}
+  .contact{margin-top:20px;border-top:1px solid var(--line);padding-top:18px}
+  .contact .row{display:flex;gap:12px;padding:7px 0;font-size:14.5px;flex-wrap:wrap}
+  .contact .row b{flex:none;width:110px;color:var(--ink);font-weight:600;font-size:14px}
+  .contact .row span{color:var(--ink-soft);flex:1;min-width:180px}
+  .contact a{color:var(--rose-deep);text-decoration:none;font-weight:600}
+  .contact a:hover{text-decoration:underline}
+  a.btn{text-decoration:none;display:inline-block;text-align:center}
+  .prod{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--bg-2);margin-bottom:12px}
+  .prod .ico{flex:none;width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:22px;background:#fff;border:1px solid var(--line)}
+  .footer{text-align:center;margin-top:40px;color:var(--ink-soft);font-size:13px}
+  .footer span{color:var(--rose)}
+  .back{background:none;border:none;color:var(--ink-soft);font-family:'Manrope';font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;margin-bottom:6px}
+  .back:hover{color:var(--rose-deep)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div class="brand">AI Гоо&nbsp;<span>сайхан</span></div>
+    <div class="stepcount" id="stepLabel">Танилцуулга</div>
+  </div>
+  <div class="bar"><i id="progress"></i></div>
+
+  <!-- 0 · CONTENT: opening question -->
+  <section class="screen active" data-step="0">
+    <div class="kicker">Асуулт</div>
+    <h1>Таны эс<br>яагаад ядардаг вэ?</h1>
+    <p class="lead">Арьс бүдэгрэх, нүдний доор хар толбо, нарийн үрчлээс — эдгээр нь зүгээр нэг “ядарсан” байдал биш. Энэ нь арьсны эс түвшинд болж буй жинхэнэ үйл явц юм.</p>
+    <p>Үүнийг яаж бий болдгийг ойлгож, дараа нь өөрийн арьсаа <strong>2 минутын тестээр</strong> өөрөө оношлох уу?</p>
+    <div class="choice">
+      <button onclick="go(1)">Тийм<small>Мэдмээр байна</small></button>
+      <button onclick="go(1)">Үгүй<small>Гэхдээ сонирхож байна 🙂</small></button>
+    </div>
+    <div class="footer">Бид зарж байгаа юм биш — эхлээд <span>ойлгуулъя</span>.</div>
+  </section>
+
+  <!-- 1 · CONTENT: education on WHY -->
+  <section class="screen" data-step="1">
+    <button class="back" onclick="go(0)">← Буцах</button>
+    <div class="kicker">Ойлгуулах · 1</div>
+    <h2>Эс хэрхэн “ядардаг” вэ?</h2>
+    <p>Таны арьс сая сая эсээс бүтдэг. Эс бүр дотроо <strong>митохондри</strong> хэмээх эрчим хүчний станцтай. Энэ нь арьсыг шинэчлэх, коллаген нийлэгжүүлэх, гэмтлээ засах эрчим хүч (ATP) үйлдвэрлэдэг.</p>
+    <p>Доорх хүчин зүйлс митохондрийн ажлыг сулруулж, эсийг “ядрааж” эхэлдэг:</p>
+    <div class="card tight">
+      <ul class="flist">
+        <li><span class="dot">☀</span><div><b>Хэт ягаан туяа (UV)</b><small>Чөлөөт радикал үүсгэж ДНХ, коллагенийг гэмтээдэг — гол шалтгаан.</small></div></li>
+        <li><span class="dot">☾</span><div><b>Нойргүйдэл &amp; стресс</b><small>Эс сэргэх, засагдах цаг хугацаагаа алддаг.</small></div></li>
+        <li><span class="dot">≈</span><div><b>Усгүйжилт &amp; тэжээлийн дутагдал</b><small>Антиоксидант дутвал исэлдэлтийн стресс хуримтлагдана.</small></div></li>
+        <li><span class="dot">⏳</span><div><b>Нас &amp; орчны бохирдол</b><small>Эсийн шинэчлэл удааширна: залуудаа ~28 хоног → насжихад 40–60+ хоног.</small></div></li>
+      </ul>
+    </div>
+    <p>Үр дүнд нь эс удаан шинэчлэгдэж, коллаген задарч, исэлдэлтийн гэмтэл хуримтлагддаг. Тэгээд л “ядарсан арьс” гэж бидний нэрлэдэг байдал гадагшаа илэрдэг.</p>
+    <div class="btnrow">
+      <button class="btn btn-primary" onclick="go(2)">Энэ нь хэрхэн илэрдэг вэ? →</button>
+    </div>
+  </section>
+
+  <!-- 2 · feel it differently -->
+  <section class="screen" data-step="2">
+    <button class="back" onclick="go(1)">← Буцах</button>
+    <div class="kicker">Мэдрүүлэх · 2</div>
+    <h2>Ядарсан эс ингэж<br>гадагшаа илэрдэг</h2>
+    <p>Толинд хармагц мэдрэх эдгээр шинж тэмдгүүд нь эсийн эрчим хүч буурсны “дохио” юм:</p>
+    <div class="grid2">
+      <div class="card tight"><h3>Бүдэг, амьд бус өнгө</h3><p style="margin:0;font-size:14.5px">Эсийн шинэчлэл удааширч, гадаргуу гэрлээ тусгахаа больдог.</p></div>
+      <div class="card tight"><h3>Нүдний доор хар толбо</h3><p style="margin:0;font-size:14.5px">Цусны эргэлт сулрах, ядаргааны шууд тусгал.</p></div>
+      <div class="card tight"><h3>Нарийн үрчлээс</h3><p style="margin:0;font-size:14.5px">Коллаген, эластин задарснаар арьс уян чанараа алддаг.</p></div>
+      <div class="card tight"><h3>Хуурай, барзгар мэдрэмж</h3><p style="margin:0;font-size:14.5px">Хамгаалалтын давхарга суларч, чийгээ барихаа больдог.</p></div>
+    </div>
+    <p style="margin-top:18px">Танд эдгээрийн хэд нь байна вэ? Зөвхөн харахаар хэлэхэд хэцүү. Тиймээс <strong>өөрийгөө оношлох тест</strong> бэлдсэн.</p>
+    <div class="btnrow">
+      <button class="btn btn-rose" onclick="go(3)">Тестээ эхлүүлэх →</button>
+    </div>
+  </section>
+
+  <!-- 3 · TEST -->
+  <section class="screen" data-step="3">
+    <button class="back" onclick="go(2)">← Буцах</button>
+    <div class="kicker">Өөрийгөө оношлох · 3</div>
+    <h2>Арьсны эрч хүчний тест</h2>
+    <p>8 асуулт · ~2 минут. Сүүлийн 2–4 долоо хоногийн байдлаараа үнэн зөв сонгоорой.</p>
+    <form id="quiz" class="card"></form>
+    <div class="alert" id="alert">Бүх асуултад хариулна уу — дутуу <b id="missing">0</b> асуулт байна.</div>
+    <div class="btnrow">
+      <button class="btn btn-primary" onclick="submitQuiz()">Хариугаа шууд харах →</button>
+      <button class="btn btn-ghost" onclick="resetQuiz()">Цэвэрлэх</button>
+    </div>
+  </section>
+
+  <!-- 4 · RESULT -->
+  <section class="screen" data-step="4">
+    <div class="kicker">Хариу · 4</div>
+    <h2>Таны үр дүн</h2>
+    <div class="card">
+      <div class="gauge">
+        <div class="ring" id="ring"><b id="scorePct">0%</b><small>ЯДАРГАА</small></div>
+        <div class="verdict">
+          <span class="pill" id="pill">—</span>
+          <p id="verdictText" style="margin:0;color:var(--ink);font-weight:500"></p>
+        </div>
+      </div>
+    </div>
+    <div class="card tight" id="breakdown"></div>
+    <div class="btnrow">
+      <button class="btn btn-primary" onclick="go(5)">Энэ юу гэсэн үг вэ? →</button>
+      <button class="btn btn-ghost" onclick="restart()">Дахин тестлэх</button>
+    </div>
+  </section>
+
+  <!-- 5 · EDUCATION (explain result) -->
+  <section class="screen" data-step="5">
+    <button class="back" onclick="go(4)">← Үр дүн рүү буцах</button>
+    <div class="kicker">Тайлбар · 5</div>
+    <h2 id="eduTitle">Үр дүнгийн тайлбар</h2>
+    <p id="eduBody"></p>
+    <div class="card tight">
+      <h3>Гол гэмтэгч хүчин зүйлс</h3>
+      <p id="eduFactors" style="margin:0;font-size:15px"></p>
+    </div>
+    <div class="btnrow">
+      <button class="btn btn-rose" onclick="go(6)">Яаж сэргээх вэ? →</button>
+    </div>
+  </section>
+
+  <!-- 6 · SOLUTION + recovery time -->
+  <section class="screen" data-step="6">
+    <button class="back" onclick="go(5)">← Буцах</button>
+    <div class="kicker">Шийдэл · 6</div>
+    <h2>Хэрхэн сэргээх вэ?</h2>
+    <p>Эсийн шинэчлэлийн нэг мөчлөг ойролцоогоор <strong>28 хоног</strong> үргэлжилдэг. Тогтмол арьс арчилгаа, амьдралын хэв маягийн өөрчлөлтөөр мэдэгдэхүйц үр дүн гарна.</p>
+    <div class="card tight">
+      <h3>Өдөр тутмын суурь</h3>
+      <ul class="flist">
+        <li class="sage"><span class="dot">☾</span><div><b>Нойр 7–8 цаг</b><small>Эс шөнө хамгийн идэвхтэй сэргэдэг.</small></div></li>
+        <li class="sage"><span class="dot">≈</span><div><b>Ус 1.5–2 литр</b><small>Чийг бол арьсны хамгаалалтын суурь.</small></div></li>
+        <li class="sage"><span class="dot">✦</span><div><b>Антиоксидант хоол</b><small>Жимс, ногоо, C ба E витамин исэлдэлтийн стрессийг бууруулна.</small></div></li>
+      </ul>
+    </div>
+    <div class="card tight">
+      <h3>Сэргэх хугацаа</h3>
+      <ul class="timeline" id="recovery"></ul>
+    </div>
+    <div class="btnrow">
+      <button class="btn btn-primary" onclick="go(7)">Илүү хурдан үр дүн авах нь →</button>
+    </div>
+  </section>
+
+  <!-- 7 · SERVICE -->
+  <section class="screen" data-step="7">
+    <button class="back" onclick="go(6)">← Буцах</button>
+    <div class="kicker">Санал · 7</div>
+    <h2>AI Гоо сайхны<br>үйлчилгээ</h2>
+    <p>Гэрийн арчилгаа гадаргуугаас ажилладаг. Харин эсийг <strong>дотроос нь</strong> сэргээхэд илүү гүн арга хэрэгтэй.</p>
+
+    <div class="badgewrap">
+      <span class="badge gold">Premium</span>
+      <span class="badge">Цэгэн даралт</span>
+      <span class="badge">Лимфийн массаж</span>
+      <span class="badge">AI TCPSS</span>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:15px;color:var(--rose-deep)">Энэ нь яаж ажилладаг вэ?</h3>
+      <p style="margin:6px 0 0;font-size:15.5px">Цэгэн даралт + лимфийн массаж + AI TCPSS технологийн <strong>3 синержи</strong>. Микро импульс долгионоор эсийн био-цахилгаан идэвхийг сэргээж, <strong>ATP үүсэлтийг нэмэгдүүлэн</strong>, микро эргэлт ба лимфийн урсгалыг идэвхжүүлдэг. Мэс заслын оролцоогүйгээр арьс өргөгдөж, чийгшил гүн нөхөгдөж, хялгасан үрчлээ зөөлөрнө.</p>
+      <p class="note" style="margin-top:14px">Үйлчилгээний явцад тайвшрал мэдрэгдэж, ихэнх үйлчлүүлэгчид бүр унтдаг. Арьс зөвхөн гаднаас биш — <strong style="color:var(--ink)">эсийн түвшнээс</strong> сэргээгдэнэ.</p>
+    </div>
+
+    <!-- personalized -->
+    <div class="card" style="border-color:var(--rose)">
+      <h3 style="color:var(--rose-deep)">Таны хариунд тулгуурлан →</h3>
+      <p id="svcIntro" style="margin:4px 0 10px;font-size:15px"></p>
+      <ul class="flist" id="svcMatch"></ul>
+    </div>
+
+    <!-- pricing -->
+    <div class="grid2">
+      <div class="price">
+        <small>Нэг удаа</small>
+        <b>250,000₮</b>
+        <span>Туршиж үзэхэд тохиромжтой</span>
+      </div>
+      <div class="price hot">
+        <small>Курс · 5 удаа</small>
+        <b>1,100,000₮</b>
+        <span>Илүү гүн, тогтвортой үр дүн</span>
+      </div>
+    </div>
+    <p class="note" style="margin-top:12px">Курсаар хийхэд эсийн нөхөн төлжилт давтамжтай идэвхжиж, үр дүн <strong>удаан хадгалагдана</strong>. 30–70 насныханд тохиромжтой.</p>
+
+    <div class="btnrow">
+      <a class="btn btn-rose" href="https://m.me/Baekseolbeautymongolia?ref=1751351956453" target="_blank" rel="noopener">Цаг авах →</a>
+      <button class="btn btn-ghost" onclick="go(8)">Арьсаа хамгаалах нь</button>
+    </div>
+
+    <div class="contact">
+      <div class="row"><b>📍 Хаяг</b><span>Баруун 4 зам, GEM PALACE – 15 давхар, 1506 тоот</span></div>
+      <div class="row"><b>📞 Утас</b><span>8912-9986 · 7611-9986</span></div>
+      <div class="row"><b>💬 Messenger</b><span><a href="https://m.me/Baekseolbeautymongolia?ref=1751351956453" target="_blank" rel="noopener">m.me/Baekseolbeautymongolia</a></span></div>
+    </div>
+  </section>
+
+  <!-- 8 · MAINTENANCE -->
+  <section class="screen" data-step="8">
+    <button class="back" onclick="go(7)">← Буцах</button>
+    <div class="kicker">Арчилгаа · 8</div>
+    <h2>Сэргэсэн арьсаа<br>хадгалах нь</h2>
+    <p>Эс сэргэсний дараа хамгийн чухал нь — дахин ядрахаас сэргийлэх. Үүний хоёр тулгуур багана:</p>
+
+    <div class="prod">
+      <div class="ico">☀</div>
+      <div>
+        <h3>Нарны тос (SPF 30+) — өдөр бүр</h3>
+        <p style="margin:0;font-size:15px">UV туяа бол эс ядраах <strong>гол шалтгаан</strong>. Үүлтэй өдөр, гэрт ч SPF хэрэглэх нь коллаген задралыг хамгийн их бууруулдаг арга. Энэ алхмыг алгасвал бусад нь дэмий.</p>
+      </div>
+    </div>
+    <div class="prod">
+      <div class="ico">✦</div>
+      <div>
+        <h3>VC крем (С витамин) — өглөө бүр</h3>
+        <p style="margin:0;font-size:15px">Хүчтэй антиоксидант — чөлөөт радикалыг саармагжуулж, арьсны өнгийг гэрэлтүүлж, коллаген нийлэгжилтийг дэмждэг. SPF-тэй хослуулбал хамгаалалт хоёр дахин нэмэгдэнэ.</p>
+      </div>
+    </div>
+
+    <div class="card tight" style="margin-top:6px">
+      <h3>Энгийн өдөр тутмын дараалал</h3>
+      <p style="margin:0;font-size:15px"><strong>Өглөө:</strong> Цэвэрлэгч → VC крем → Чийгшүүлэгч → <strong>SPF</strong><br>
+      <strong>Орой:</strong> Цэвэрлэгч → Чийгшүүлэгч → (долоо хоногт 2–3 удаа сэргээгч)</p>
+    </div>
+
+    <p style="margin-top:18px">Та эхний алхмыг хийчихлээ — <strong>ойлголоо</strong>. Үлдсэн нь зүгээр л тогтвортой байх.</p>
+    <div class="btnrow">
+      <button class="btn btn-primary" onclick="restart()">↻ Эхнээс үзэх</button>
+    </div>
+    <div class="footer">AI <span>Гоо сайхан</span> · Ойлгуулах → Мэдрүүлэх → Оношлох → Тайлбарлах → Шийдэх</div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- State + Navigation ---------- */
+const STATE = {factors:[], band:null};
+const TOTAL = 8;
+const labels = ["Танилцуулга","Ойлгуулах","Мэдрүүлэх","Тест","Хариу","Тайлбар","Шийдэл","Санал","Арчилгаа"];
+function go(step){
+  if(step===7) fillService();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.querySelector('.screen[data-step="'+step+'"]');
+  el.classList.add('active');
+  document.getElementById('progress').style.width = (step/TOTAL*100)+'%';
+  document.getElementById('stepLabel').textContent = labels[step];
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function restart(){ go(0); }
+
+/* ---------- Quiz data ---------- */
+const QUESTIONS = [
+  {q:"Та өдөрт 6 цагаас бага унтдаг уу?", f:"нойр"},
+  {q:"Долоо хоногт 3-аас олон удаа стресст автдаг уу?", f:"стресс"},
+  {q:"Өдөрт 1.5 литрээс бага ус уудаг уу?", f:"усгүйжилт"},
+  {q:"Нар хамгаалах тос (SPF) тогтмол хэрэглэдэггүй үү?", f:"UV"},
+  {q:"Арьс өглөө сэргэг бус, бүдэг харагддаг уу?", f:"бүдэгрэл"},
+  {q:"Нүдний доор хар толбо эсвэл хаван байнга илэрдэг үү?", f:"цусны эргэлт"},
+  {q:"Арьс хуурай, чангарсан, барзгар мэдрэмж төрдөг үү?", f:"чийгшил"},
+  {q:"Сүүлийн үед нарийн үрчлээс нэмэгдсэн гэж бодож байна уу?", f:"коллаген"},
+];
+const OPTS = [["Үгүй",0],["Заримдаа",1],["Тийм",2]];
+
+function buildQuiz(){
+  const form = document.getElementById('quiz');
+  form.innerHTML = QUESTIONS.map((item,i)=>`
+    <div class="q">
+      <div class="num">${String(i+1).padStart(2,'0')}</div>
+      <div class="qt">${item.q}</div>
+      <div class="opts">
+        ${OPTS.map(([label,val])=>`
+          <label><input type="radio" name="q${i}" value="${val}"><span>${label}</span></label>
+        `).join('')}
+      </div>
+    </div>`).join('');
+}
+function resetQuiz(){
+  document.querySelectorAll('#quiz input').forEach(i=>i.checked=false);
+  document.getElementById('alert').style.display='none';
+}
+
+/* ---------- Scoring & result ---------- */
+function submitQuiz(){
+  let score=0, answered=0; const triggered=[];
+  QUESTIONS.forEach((item,i)=>{
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if(sel){ answered++; const v=+sel.value; score+=v; if(v>=1) triggered.push({f:item.f,v}); }
+  });
+  if(answered<QUESTIONS.length){
+    document.getElementById('missing').textContent = QUESTIONS.length-answered;
+    document.getElementById('alert').style.display='block';
+    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+    return;
+  }
+  document.getElementById('alert').style.display='none';
+  renderResult(score, triggered);
+  go(4);
+}
+
+const BANDS = [
+  {max:4,  label:"Сэргэг",          color:"#7E8C6E",
+   verdict:"Таны арьсны эс одоохондоо эрч хүчтэй байна. Гайхалтай — энэ түвшнээ хадгалах нь зорилго.",
+   edu:"Таны эсүүд эрчим хүчээ сайн үйлдвэрлэж, тогтмол шинэчлэгдэж байгаа шинж. Илрэлүүд бараг алга. Гол анхаарах зүйл бол урьдчилан сэргийлэх — ялангуяа UV-аас хамгаалах.",
+   rec:[["1–2 долоо хоног","Одоогийн хэв маягаа хадгалахад л хангалттай."],["Тогтмол","Өдөр бүр SPF хэрэглэснээр энэ түвшнээ олон жил барина."]]},
+  {max:8,  label:"Бага зэрэг ядарсан", color:"#C9A96A",
+   verdict:"Эсэд бага зэрэг ачаалал орж эхэлжээ. Эрт анзаарсан нь сайн хэрэг — амархан эргүүлж болно.",
+   edu:"Митохондрийн ажил бага зэрэг сулрч, шинэчлэл удааширч эхэлсэн дохио харагдаж байна. Энэ үе шатанд амьдралын хэв маягийн жижиг өөрчлөлт том нөлөө үзүүлдэг.",
+   rec:[["1 долоо хоног","Нойр, ус тогтворжихоор шинэлэг мэдрэмж эргэнэ."],["2–4 долоо хоног","Бүдэгрэл багасч, өнгө тэгширнэ."],["4 долоо хоног+","Шинэ эсийн мөчлөг бүрэн шинэчлэгдэнэ."]]},
+  {max:12, label:"Ядарсан",         color:"#B96B52",
+   verdict:"Эсийн эрч хүч мэдэгдэхүйц буурсан байна. Зорилготой арчилгаа эхлүүлэх цаг боллоо.",
+   edu:"Исэлдэлтийн стресс хуримтлагдаж, коллаген задрал хурдсаж, эсийн шинэчлэл тодорхой удаашрсан байна. Илрэлүүд (бүдэгрэл, үрчлээс, хуурайшил) хосолж эхэлсэн. Тогтмол, олон талт арчилгаа шаардлагатай.",
+   rec:[["1–2 долоо хоног","Чийгшил эргэж, хуурайшил намжина."],["3–4 долоо хоног","Өнгө гэрэлтэж, бүдэгрэл буурна."],["6–8 долоо хоног","Уян чанар сэргэж, үрчлээс зөөлрөнө."]]},
+  {max:16, label:"Их ядарсан",       color:"#9E5740",
+   verdict:"Эс эрс ядарсан байна. Сандрах хэрэггүй — зорилготой, тогтвортой арчилгаагаар бүрэн сэргэх боломжтой.",
+   edu:"Олон хүчин зүйл нэгэн зэрэг нөлөөлж, митохондрийн эрчим хүч ихээхэн буурсан байна. Хамгаалалтын давхарга суларч, исэлдэлтийн гэмтэл хуримтлагдсан. Энэ нь эргэшгүй гэсэн үг биш — эс байнга шинэчлэгддэг тул тэвчээртэй арчилгаа үр дүнгээ өгнө.",
+   rec:[["2 долоо хоног","Хуурайшил, чангарал эхэлж намжина."],["4–6 долоо хоног","Өнгө гэрэлтэж, нэг мөчлөг шинэчлэгдэнэ."],["8–12 долоо хоног","Уян чанар, нягтрал тогтвортой сэргэнэ."]]},
+];
+
+function renderResult(score, triggered){
+  const pct = Math.round(score/16*100);
+  const band = BANDS.find(b=>score<=b.max);
+
+  // gauge
+  const ring = document.getElementById('ring');
+  ring.style.setProperty('--p', pct);
+  ring.style.background = `conic-gradient(${band.color} ${pct}%, var(--line) 0)`;
+  document.getElementById('scorePct').textContent = pct+'%';
+  const pill = document.getElementById('pill');
+  pill.textContent = band.label; pill.style.background = band.color;
+  document.getElementById('verdictText').textContent = band.verdict;
+
+  // breakdown
+  const sorted = triggered.sort((a,b)=>b.v-a.v).slice(0,4).map(t=>t.f);
+  const uniq = [...new Set(sorted)];
+  STATE.factors = [...new Set(triggered.map(t=>t.f))];
+  STATE.band = band;
+  document.getElementById('breakdown').innerHTML =
+    `<h3>Хариунд тулгуурласан тойм</h3><p style="margin:0;font-size:15px">Нийт оноо: <strong>${score}/16</strong>. ${
+      uniq.length ? "Хамгийн их нөлөөлж буй хүчин зүйлс: <strong>"+uniq.join(", ")+"</strong>." : "Тодорхой эрсдэлт хүчин зүйл ажиглагдсангүй — гайхалтай!"
+    }</p>`;
+
+  // education
+  document.getElementById('eduTitle').textContent = `Та: «${band.label}» түвшинд`;
+  document.getElementById('eduBody').textContent = band.edu;
+  document.getElementById('eduFactors').textContent =
+    uniq.length ? uniq.join(" · ") + " — эдгээр нь таны хувьд хамгийн их анхаарах цэгүүд." : "Одоогоор тодорхой гэмтэгч хүчин зүйл алга. Урьдчилан сэргийлэхэд анхаараарай.";
+
+  // recovery timeline
+  document.getElementById('recovery').innerHTML = band.rec.map(([t,d])=>
+    `<li><b>${t}</b><small>${d}</small></li>`).join('');
+}
+
+/* ---------- Personalized service match ---------- */
+const SVC_MAP = {
+  "усгүйжилт":   {i:"≈", b:"Чийгшил гүн нөхөгдөж, арьс уян хатан болно", s:"Микро импульс эсийн чийг барих чадварыг сэргээнэ."},
+  "чийгшил":     {i:"≈", b:"Чийгшил гүн нөхөгдөж, арьс уян хатан болно", s:"Микро импульс эсийн чийг барих чадварыг сэргээнэ."},
+  "цусны эргэлт":{i:"⟳", b:"Лимфийн урсгал идэвхжиж, хаван буурна", s:"Цэгэн даралт + лимфийн массаж нүдний доорх хаван, хар толбыг бууруулна."},
+  "бүдэгрэл":    {i:"✦", b:"Арьсны өнгө жигдэрч, гэрэлтэлт нэмэгдэнэ", s:"Микро эргэлт идэвхжиж, бүдэг арьс гэрэлтэнэ."},
+  "коллаген":    {i:"↑", b:"Хялгасан үрчлээ зөөлөрч, нүүрний контур өргөгдөнө", s:"Булчин идэвхжиж, контур тодорч, үрчлээ зөөлөрнө."},
+  "UV":          {i:"◎", b:"Эсийн нөхөн төлжилт идэвхжиж, арьсны чанар сайжирна", s:"ATP үүсэлт нэмэгдэж, UV-ийн гэмтлийг сэргээнэ."},
+  "нойр":        {i:"☾", b:"Тайвшрал мэдрэгдэж, эс илүү сайн сэргэдэг", s:"Ихэнх үйлчлүүлэгч үйлчилгээний явцад бүр унтдаг."},
+  "стресс":      {i:"☾", b:"Тайвшрал мэдрэгдэж, эс илүү сайн сэргэдэг", s:"Ихэнх үйлчлүүлэгч үйлчилгээний явцад бүр унтдаг."},
+};
+function fillService(){
+  const intro = document.getElementById('svcIntro');
+  const list  = document.getElementById('svcMatch');
+  if(!STATE.band){
+    intro.textContent = "Тестээ бөглөвөл энд яг танд тохирох үр дүнг харуулна. Доорх ерөнхий давуу талуудтай танилцаарай.";
+    list.innerHTML = [
+      {i:"⟳",b:"Лимфийн урсгал идэвхжиж, хаван буурна"},
+      {i:"↑",b:"Нүүрний контур тодорч, өргөгдсөн харагдана"},
+      {i:"≈",b:"Чийгшил гүн нөхөгдөнө"},
+      {i:"✦",b:"Арьсны өнгө жигдэрч гэрэлтэнэ"},
+    ].map(x=>`<li><span class="dot">${x.i}</span><div><b>${x.b}</b></div></li>`).join('');
+    return;
+  }
+  // dedupe service benefits by their label
+  const seen = new Set(), picks = [];
+  STATE.factors.forEach(f=>{
+    const m = SVC_MAP[f];
+    if(m && !seen.has(m.b)){ seen.add(m.b); picks.push(m); }
+  });
+  if(picks.length===0){
+    intro.textContent = `Таны үр дүн «${STATE.band.label}» — урьдчилан сэргийлэх төгс үе. Энэ үйлчилгээ нь арьсны эрч хүчээ удаан хадгалахад тусална.`;
+    picks.push(SVC_MAP["UV"], SVC_MAP["коллаген"]);
+  } else {
+    intro.innerHTML = `Таны үр дүн <strong>«${STATE.band.label}»</strong>. Тестэд илэрсэн шинж тэмдгүүдийн дагуу энэ үйлчилгээ танд яг дараах байдлаар тусална:`;
+  }
+  list.innerHTML = picks.slice(0,5).map(m=>
+    `<li><span class="dot">${m.i}</span><div><b>${m.b}</b><small>${m.s||''}</small></div></li>`).join('');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
